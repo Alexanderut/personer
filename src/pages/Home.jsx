@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore'
 import styled from 'styled-components'
-import { db } from '../Firebase/firebase'
+import { db } from '../firebase/firebase'
 import trash from "../assets/trash.jpg"
 import cog from "../assets/cog.png"
 import {Link} from "react-router-dom"

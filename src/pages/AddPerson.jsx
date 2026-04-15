@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { collection, addDoc } from 'firebase/firestore'
-import { db } from '../Firebase/firebase'
+import { db } from '../firebase/firebase'
 
 export default function AddPerson() {
 

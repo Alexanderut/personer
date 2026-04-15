@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import {doc, getDoc, updateDoc} from "firebase/firestore"
 import { useParams, useNavigate} from "react-router-dom"
-import { db } from '../Firebase/firebase'
+import { db } from '../firebase/firebase'
 
 export default function UpdatePerson() {
 
