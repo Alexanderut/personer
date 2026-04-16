@@ -38,7 +38,7 @@ export default function Home() {
 
       <div className='cardContainer'>
         {persons.map((person) => (
-          <div className='personCard' key={person.id}>
+            <Link to={`/person/${person.id}`} key={person.id} className="cardLink"><div className='personCard' key={person.id}>
 
 
           
@@ -59,8 +59,10 @@ export default function Home() {
             <p>Alder: {person.alder}</p>
             <p>Kjønn: {person.kjonn}</p>
             <p>Studieprogram: {person.studieprogram}</p>
+            <div className='trachIconContainer'>
             <img className='trashIcon' src={trash} onClick= {()=>deletePerson(person.id)} />
-          </div>
+            </div>
+          </div></Link>
         ))}
       </div>
     </StyleWrapper>
@@ -89,6 +91,8 @@ h1{
     background-color: #f4f4f4;
     border-radius: 10px;
     padding: 15px;
+    position: relative;
+    padding-bottom: 50px;
 }
 
 .personImage{
@@ -97,19 +101,31 @@ h1{
     object-fit: cover;
     border-radius: 8px;
     margin-bottom: 10px;
+    margin-top: 25px;
 }
-
+.trachIconContainer{
+    position: static;
+}
 .trashIcon{
+    position:absolute;
+    bottom: 15px;
+    right:15px;
     width: 30px;
     height: auto;
-    float:right;
     cursor: pointer;
 }
 
 .cogImage{
-     width: 30px;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 23px;
     height: auto;
-    float:right;
     cursor: pointer;
+}
+
+.cardLink {
+  text-decoration: none;
+  color: inherit;
 }
 `

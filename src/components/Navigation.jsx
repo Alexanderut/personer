@@ -10,7 +10,6 @@ export default function Navigation() {
 
     <div className='navWrapper'>
         <a href="/"><div className='navItems'>Hjem</div></a>
-        <Link><div className='navItems'>Personer</div></Link>
         <Link to="/add"><div className='navItems'>+ legg til person</div></Link>
 
     </div>

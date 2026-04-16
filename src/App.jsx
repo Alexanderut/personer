@@ -8,6 +8,7 @@ import Navigation from './components/Navigation';
 import Home from "./pages/Home"
 import AddPerson from './pages/AddPerson';
 import UpdatePerson from './pages/UpdatePerson';
+import Person from './pages/Person'
 
 
 
@@ -22,6 +23,8 @@ function App() {
     <Route path="/"  element={<Home/>} />
     <Route path="/add"  element={<AddPerson/>} />
     <Route path="/updateperson/:id"  element={<UpdatePerson/>} />
+    <Route path="/person/:id"  element={<Person/>} />
+
 
 
 
