@@ -26,9 +26,6 @@ function App() {
     <Route path="/person/:id"  element={<Person/>} />
 
 
-
-
-
 </Routes>
 
 
