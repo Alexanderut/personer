@@ -12,17 +12,13 @@ export default function Home() {
   useEffect(() => {
     const fetchPersons = async () => {
       const snapshot = await getDocs(collection(db, "personer"))
-
       const personsArray = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data()
       }))
-
       setPersons(personsArray)
     }
-
     fetchPersons()
-    console.log(persons)
   }, [])
 
 
@@ -34,38 +30,47 @@ export default function Home() {
 
   return (
     <StyleWrapper>
-      <h1>Personer</h1>
+  <h1>Personer</h1>
 
-      <div className='cardContainer'>
-        {persons.map((person) => (
-            <Link to={`/person/${person.id}`} key={person.id} className="cardLink"><div className='personCard' key={person.id}>
+  <div className='cardContainer'>
+    {persons.map((person) => (
+      <div className='personCard' key={person.id}>
 
+        <Link to={`/person/${person.id}`} className="cardLink">
+          <img
+            className='personImage'
+            src={
+              !person.bilde || person.bilde === "no image"
+                ? "https://www.shutterstock.com/image-vector/avatar-photo-default-user-icon-600nw-2558759027.jpg"
+                : person.bilde
+            }
+            alt={person.navn}
+          />
 
-          
-         <img className='personImage'
-  src={
-    !person.bilde || person.bilde === "no image"
-      ? "https://www.shutterstock.com/image-vector/avatar-photo-default-user-icon-600nw-2558759027.jpg"
-      : person.bilde
-  }
-  alt={person.navn}
-/>
-          
-            <h2>{person.navn}</h2>
+          <h2>{person.navn}</h2>
+        </Link>
 
-<Link to={`/updateperson/${person.id}`}><img className="cogImage" src={cog}/></Link>
+        <Link to={`/updateperson/${person.id}`}>
+          <img className="cogImage" src={cog} alt="Rediger" />
+        </Link>
 
+        <p>Alder: {person.alder}</p>
+        <p>Kjønn: {person.kjonn}</p>
+        <p>Studieprogram: {person.studieprogram}</p>
 
-            <p>Alder: {person.alder}</p>
-            <p>Kjønn: {person.kjonn}</p>
-            <p>Studieprogram: {person.studieprogram}</p>
-            <div className='trachIconContainer'>
-            <img className='trashIcon' src={trash} onClick= {()=>deletePerson(person.id)} />
-            </div>
-          </div></Link>
-        ))}
+        <div className='trachIconContainer'>
+          <img
+            className='trashIcon'
+            src={trash}
+            alt="Slett"
+            onClick={() => deletePerson(person.id)}
+          />
+        </div>
+
       </div>
-    </StyleWrapper>
+    ))}
+  </div>
+</StyleWrapper>
   )
 }
 

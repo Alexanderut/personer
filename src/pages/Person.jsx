@@ -12,6 +12,7 @@ export default function Person() {
     const fetchPerson = async () => {
       const docRef = doc(db, 'personer', id)
       const docSnap = await getDoc(docRef)
+      console.log(docSnap)
 
       if (docSnap.exists()) {
         setPerson({
