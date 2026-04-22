@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { doc, getDoc } from 'firebase/firestore'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
-import { db } from '../Firebase/firebase'
+import { db } from '../firebase/firebase'
 
 export default function Person() {
   const { id } = useParams()
