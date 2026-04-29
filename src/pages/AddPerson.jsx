@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { collection, addDoc } from 'firebase/firestore'
-import { db, auth } from '../firebase/firebase'
+import { db, auth, storage } from '../firebase/firebase'
 import { onAuthStateChanged } from 'firebase/auth'
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { useNavigate } from 'react-router-dom'
 
 export default function AddPerson() {
@@ -10,10 +11,15 @@ export default function AddPerson() {
   const [alder, setAlder] = useState("")
   const [kjonn, setKjonn] = useState("")
   const [bilde, setBilde] = useState("")
+  const [bildeFil, setBildeFil] = useState(null)
+  const [bildeUrl, setBildeUrl] = useState("")
   const [studieprogram, setStudieprogram] = useState("")
   const [user, setUser] = useState(null)
 
   const navigate = useNavigate()
+
+  const DEFAULTIMAGE =
+    "https://firebasestorage.googleapis.com/v0/b/reactuit.firebasestorage.app/o/default.png?alt=media&token=20d300c7-9470-4f76-9e89-1f9a6ce21ba1"
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -36,22 +42,36 @@ export default function AddPerson() {
       return
     }
 
-    const newPerson = {
-      navn: navn,
-      alder: alder,
-      kjonn: kjonn,
-      bilde: bilde ? bilde : "no image",
-      studieprogram: studieprogram,
-      ownerId: user.uid
-    }
-
     try {
+      let endeligBildeUrl = "no image"
+
+      if (bildeFil) {
+        const filnavn = `${Date.now()}-${bildeFil.name}`
+        const imageRef = ref(storage, `personImages/${user.uid}/${filnavn}`)
+
+        await uploadBytes(imageRef, bildeFil)
+        endeligBildeUrl = await getDownloadURL(imageRef)
+      } else if (bilde) {
+        endeligBildeUrl = bilde
+      }
+
+      const newPerson = {
+        navn: navn,
+        alder: alder,
+        kjonn: kjonn,
+        bilde: endeligBildeUrl,
+        studieprogram: studieprogram,
+        ownerId: user.uid
+      }
+
       await addDoc(collection(db, "personer"), newPerson)
 
       setNavn("")
       setAlder("")
       setKjonn("")
       setBilde("")
+      setBildeFil(null)
+      setBildeUrl("")
       setStudieprogram("")
 
       navigate("/")
@@ -95,7 +115,31 @@ export default function AddPerson() {
           type='text'
           placeholder="Lim inn bildeadresse her..."
           value={bilde}
-          onChange={(e) => setBilde(e.target.value)}
+          onChange={(e) => {
+            setBilde(e.target.value)
+            setBildeUrl(e.target.value)
+            setBildeFil(null)
+          }}
+        />
+
+        <input
+          type='file'
+          accept='image/*'
+          onChange={(e) => {
+            const file = e.target.files[0]
+            setBildeFil(file)
+
+            if (file) {
+              const tempURL = URL.createObjectURL(file)
+              setBildeUrl(tempURL)
+            }
+          }}
+        />
+
+        <img
+          src={bildeUrl || bilde || DEFAULTIMAGE}
+          className='thumbnail'
+          alt="bildeThumbnail"
         />
 
         <input
@@ -141,5 +185,12 @@ const StyledForm = styled.div`
     padding: 10px;
     font-size: 16px;
     cursor: pointer;
+  }
+
+  .thumbnail {
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
   }
 `
